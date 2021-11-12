@@ -1,3 +1,6 @@
+//this example comes with video tutorial: https://youtu.be/kV8oMMXbzSM
+//by Gen0me, https://github.com/63n0m3/Custom_Button
+//btc: 1A8Gqs2JwdjuAfFZ4cnM4CWy9hGFzsCpzK
 #include <MCUFRIEND_kbv.h>      /// Adafruit GFX is included inside this library
 #include <Extension_to_Adafruit1p0.hpp>
 MCUFRIEND_kbv tft;
