@@ -1,0 +1,103 @@
+<html>
+<head>
+<style>
+body{background-color:black;max-width:1200px;}
+
+h1 {color:#d4ea20;font-family:Nyala;text-align:center;font-size:200%;}
+h2 {color:#c4da20;font-family:Nyala;margin-top:0px;margin-bottom:0px;font-size:140%;text-align:center;}
+pre {color:#00ffff;}
+
+p {color:#00ffff;font-family:Segoe UI;text-align:center;margin-top:0px;margin-bottom:0px;font-size:120%;}
+p.small {color:#00ffff;font-family:Segoe UI;text-align:center;margin-top:0px;margin-bottom:0px;font-size:100%;}
+p.left {color:#00ffff;font-family:Segoe UI;display:inline;text-align:left;font-size:125%;}
+p.links {color:#f9ec7e;font-family:Segoe UI;display:inline;text-align:left;}
+p.ovierview {color:#ff99ff;font-family:Segoe UI;text-align:center;margin-top:0px;margin-bottom:0px;font-size:120%;}
+
+
+a {text-decoration:none;}
+a:link {color:#00afef;font-family:Segoe UI;}
+a:visited {color:#a4ca20;font-family:Segoe UI;}
+a:hover {color:#e396f4;font-family:Segoe UI;}
+img {display:block;max-width:100%;margin-left:auto;margin-right:auto;}
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+<h1>Adafruit Extension</h1>
+<p class="ovierview">Custom_Button is a class like Adafruit_GFX_Button dedicated to draw and maintain (as the name implies) buttons on touch-screens. In usage it is very similar to Adafruit_GFX_Button, in fact if you change only object class name and .initButton(...) function arguments, the rest of the usage should work seemlesly. </p>
+<br><h2>Custom_Button</h2>
+<p>Custom_Button can draw buttons in three different ways:
+</p>
+<p class="left">
+<font color=#d396f4>-</font> It can draw monochrome bitmaps in format of uint8_t[]. Every single bit is responsible for one pixel in the image and every bit is used as the mask to draw or not(keep transparent) pixels to mentioned in the initButton(...) function colors. There is a "true" and "false" color which correspond to the original naming scheme of Adafruit_GFX_Button.
+<br><font color=#d396f4>-</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data as the button.
+<br><font color=#d396f4>-</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data with applied masks in uint8_t[] format.
+</p>
+<p>
+<br>Which way the button is going to be drawn depends only on the arguments sent to initButton(...).
+<br>After initButton(...) standard usage(function calls) can be the same as the original Adafruit_GFX_Button...</p>
+<p class="left">
+<br><font color=#d396f4>-</font> + there is extra function if you would like to change the buttons position: "void Change_Position(int16_t mid_x, int16_t mid_y)"
+<br><font color=#d396f4>-</font>  + drawButton call remembers time when last time button was drawed into varieable: "Last_Time_Used_millis". You can use this varieable to time multi-clicks. I actually wrote it this way, because contains() function and press() functions dont have to be called with every main loop iteration. This approach is not faster in usual arduino enviroment due to the large clock-value-varieable compared to 64 bit systems.
+</p>
+
+<br>
+<br><h2>Custom_Button_Example:</h2>
+<p>
+This example presents all three methodes Custom_Button can be used to draw the monochrome/565bitmap with mask/565bitmap without mask. There is inside also commented example of using the "Last_Time_Used_millis" varieable instead of press() and justPressed()</p>
+<p>
+Same as you would usually declare Adafruit_GFX_Button in global space:
+<br><font color=#d396f4>Adafruit_GFX_Button Ada_But_Exa;</font>
+<br>you can declare a Custom_Button:
+<br><font color=#d396f4>Custom_Button Cus_Mon_Exa;</font>
+<br><font color=#d396f4>Custom_Button Cus_Double_16bit_Exa;</font>
+<br>Than inside <font color=#d396f4>setup()</font> as you can call:
+<br><font color=#d396f4>Cus_Mon_Exa.initButton(60, 100, Four_mask, GREEN, PINK, 32, 40, &tft);</font>
+<br>60 is central X position, 100 is central Y position, Four_mask is a pointer to PROGMEMed mask array of uint8_t(continue reading for more info), GREEN and PINK are predeclared colors (uint16_t 5/6/5), 32 is width of bitmap(and button), 40 is height, tft can be your MCUFRIEND_kbv screen object(it inherits from Adafruit_GFX so can be used). If you make such a call all consequent button calls will draw your monochrome bitmap colored with mentioned colors with transparent background.
+<br><font color=#d396f4>Cus_Double_16bit_Exa.initButton(110, 160, Return_arr_88x40, Return_mask, ReturnP_arr_88x40, Return_mask, 88, 40, &tft);</font>
+<br>110 is central X position, 160 is central Y position, Return_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t 5/6/5 for true display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(true display). ReturnP_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t for false display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(false display). 88 is width, 40 is height, tft is a screen object.
+<br>Alternativelly if instead of mask pointers, there will be NULL pointers sent:
+<br><font color=#d396f4>Cus_Double_16bit_Exa.initButton(110, 160, Return_arr_88x40, NULL, ReturnP_arr_88x40, NULL, 88, 40, &tft);</font>
+<br>drawing algorithm will skip mask dependent calculations.
+<br>Rest can be used just like with Adafruit_GFX_Button:
+</p>
+<p class="left"><font color=#d396f4>
+Cus_Mon_Exa.press(Cursor_Pressed && Cus_Mon_Exa.contains(Cursor_X, Cursor_Y));
+<br>    if (Cus_Mon_Exa.justPressed()){
+<br>&nbsp&nbsp      Cus_Mon_Exa.drawButton(false);
+<br>&nbsp&nbsp      Cus_Mon_Exa.drawButton(true);
+<br>    }
+<br><br>    Cus_Double_16bit_Exa.press(Cursor_Pressed && Cus_Double_16bit_Exa.contains(Cursor_X, Cursor_Y));
+<br>    if (Cus_Double_16bit_Exa.justPressed()){
+<br>&nbsp&nbsp      Cus_Double_16bit_Exa.drawButton(false);
+<br>&nbsp&nbsp      Cus_Double_16bit_Exa.drawButton(true);
+<br>    }
+</font></p>
+<p>
+<br>Or you can use alternative commented methode.
+</p>
+<br>
+<br><h2>Generating bitmaps and masks:</h2>
+<p> In folder bmp extractor there is a tool for exporting uint16_t bitmap arrays and uint8_t masks. It can be compilled on any x86 machine. Whatever button image is, it should be converted to 24bit bmp file. It was tested with MS Paint, Paint.NET and Blender. The totally black(0x000000) or totally white(0xffffff) parts of an image will be used to determine mask. Follow the program guidance for successfull bitmap and mask generation.
+</p>
+
+<br><h2>LINKS:</h2>
+<p>
+Adafruit:
+<br><a href="adafruit.com">adafruit.com</a>
+</p>
+<br><h2>Status - Oct 2021 - Maintained</h2>
+<p>
+by Gen0me
+</p>
+</body>
+
+</html>
