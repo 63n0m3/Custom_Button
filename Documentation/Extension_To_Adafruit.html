@@ -37,16 +37,16 @@ img {display:block;max-width:100%;margin-left:auto;margin-right:auto;}
 <p>Custom_Button can draw buttons in three different ways:
 </p>
 <p class="left">
-<font color=#d396f4>-</font> It can draw monochrome bitmaps in format of uint8_t[]. Every single bit is responsible for one pixel in the image and every bit is used as the mask to draw or not(keep transparent) pixels to mentioned in the initButton(...) function colors. There is a "true" and "false" color which correspond to the original naming scheme of Adafruit_GFX_Button.
-<br><font color=#d396f4>-</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data as the button.
-<br><font color=#d396f4>-</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data with applied masks in uint8_t[] format.
+<font color=#d396f4>+</font> It can draw monochrome bitmaps in format of uint8_t[]. Every single bit is responsible for one pixel in the image and every bit is used as the mask to draw or not(keep transparent) pixels to mentioned in the initButton(...) function colors. There is a "true" and "false" color which correspond to the original naming scheme of Adafruit_GFX_Button.
+<br><font color=#d396f4>+</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data as the button.
+<br><font color=#d396f4>+</font> It can draw an RGB565 bitmaps(true and false) from uint16_t[] data with applied masks in uint8_t[] format.
 </p>
 <p>
 <br>Which way the button is going to be drawn depends only on the arguments sent to initButton(...).
 <br>After initButton(...) standard usage(function calls) can be the same as the original Adafruit_GFX_Button...</p>
 <p class="left">
-<br><font color=#d396f4>-</font> + there is extra function if you would like to change the buttons position: "void Change_Position(int16_t mid_x, int16_t mid_y)"
-<br><font color=#d396f4>-</font>  + drawButton call remembers time when last time button was drawed into varieable: "Last_Time_Used_millis". You can use this varieable to time multi-clicks. I actually wrote it this way, because contains() function and press() functions dont have to be called with every main loop iteration. This approach is not faster in usual arduino enviroment due to the large clock-value-varieable compared to 64 bit systems.
+<font color=#d396f4>+</font> there is extra function if you would like to change the buttons position: "void Change_Position(int16_t mid_x, int16_t mid_y)"
+<br><font color=#d396f4>+</font> drawButton call remembers time when last time button was drawed into varieable: "Last_Time_Used_millis". You can use this varieable to time multi-clicks. I actually wrote it this way, because contains() function and press() functions dont have to be called with every main loop iteration. This approach is not faster in usual arduino enviroment due to the large clock-value-varieable compared to 64 bit systems.
 </p>
 
 <br>
@@ -61,9 +61,9 @@ Same as you would usually declare Adafruit_GFX_Button in global space:
 <br><font color=#d396f4>Custom_Button Cus_Double_16bit_Exa;</font>
 <br>Than inside <font color=#d396f4>setup()</font> as you can call:
 <br><font color=#d396f4>Cus_Mon_Exa.initButton(60, 100, Four_mask, GREEN, PINK, 32, 40, &tft);</font>
-<br>60 is central X position, 100 is central Y position, Four_mask is a pointer to PROGMEMed mask array of uint8_t(continue reading for more info), GREEN and PINK are predeclared colors (uint16_t 5/6/5), 32 is width of bitmap(and button), 40 is height, tft can be your MCUFRIEND_kbv screen object(it inherits from Adafruit_GFX so can be used). If you make such a call all consequent button calls will draw your monochrome bitmap colored with mentioned colors with transparent background.
+<br>60 is central X position, 100 is central Y position, Four_mask is a pointer to PROGMEMed mask array of uint8_t(continue reading for more info), GREEN and PINK are predeclared colors (uint16_t 5/6/5), 32 is width of bitmap(and button), 40 is height, tft can be your MCUFRIEND_kbv screen object(it inherits from Adafruit_GFX so it can be used the same as Adafruit_GFX). If you make such a call all consequent button calls will draw your monochrome bitmap colored with mentioned colors with transparent background.
 <br><font color=#d396f4>Cus_Double_16bit_Exa.initButton(110, 160, Return_arr_88x40, Return_mask, ReturnP_arr_88x40, Return_mask, 88, 40, &tft);</font>
-<br>110 is central X position, 160 is central Y position, Return_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t 5/6/5 for true display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(true display). ReturnP_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t for false display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(false display). 88 is width, 40 is height, tft is a screen object.
+<br>110 is central X position, 160 is central Y position, Return_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t 5/6/5 for true display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(true display). ReturnP_arr_88x40 is a pointer to PROGMEMed bitmap array of uint16_t for false display. Return_mask is a pointer to PROGMEMed mask array of uint8_t(false display). 88 is width, 40 is height, tft is a screen object. Notice that in this example mask is used the same for both true and false display.
 <br>Alternativelly if instead of mask pointers, there will be NULL pointers sent:
 <br><font color=#d396f4>Cus_Double_16bit_Exa.initButton(110, 160, Return_arr_88x40, NULL, ReturnP_arr_88x40, NULL, 88, 40, &tft);</font>
 <br>drawing algorithm will skip mask dependent calculations.
@@ -82,7 +82,7 @@ Cus_Mon_Exa.press(Cursor_Pressed && Cus_Mon_Exa.contains(Cursor_X, Cursor_Y));
 <br>    }
 </font></p>
 <p>
-<br>Or you can use alternative commented methode.
+<br>Or you can use alternative commented methode based on timing approach.
 </p>
 <br>
 <br><h2>Generating bitmaps and masks:</h2>
